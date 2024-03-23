@@ -3,13 +3,7 @@ const jwt = require("jsonwebtoken");
 const Task = require("../models/task");
 const User = require("../models/user")
 
-async function getTask(req,res){
 
-    console.log("loggedin");
-    const tasks = await Task.find({user:req.user._id});
-    console.log(tasks);
-    res.render('home',{tasks:tasks,user:req.user});
-}
 
 async function newtask(req,res){
 
@@ -17,7 +11,7 @@ async function newtask(req,res){
     console.log(req.user);
     const task = await Task.create({user:req.user,name:data.name});
 
-    res.redirect('/task');
+    res.redirect('/');
 }
 async function completetask(req,res){
 
@@ -26,7 +20,7 @@ async function completetask(req,res){
     
     await Task.findByIdAndUpdate(taskId, { $set: { completed: true } });
     
-    res.redirect('/task');
+    res.redirect('/');
 }
 async function deletetask(req,res){
 
@@ -35,7 +29,7 @@ async function deletetask(req,res){
     
     await Task.findByIdAndDelete(taskId);
     
-    res.redirect('/task');
+    res.redirect('/');
 }
 
-module.exports={getTask,newtask,completetask,deletetask}
+module.exports={newtask,completetask,deletetask}

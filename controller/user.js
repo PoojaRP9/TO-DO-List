@@ -5,33 +5,17 @@ const Task = require("../models/task");
 const User = require("../models/user");
 
 
-async function home(req,res){
-
-   
-    console.log("loggedin");
-    // const tasks = await Task.find({user:req.user._id});
-    // console.log(tasks);
-    res.render('home',{user:req.user});
-
+async function userProfile(req,res){
+    res.render('profile')
 }
 
 async function homePage(req, res) {
-
-    // here we will check whether the user is logged in or not
-    const token = req.cookies['token'];
-    let user;
-    const tasks = await Task.find({user:req.user._id});
-
-    // verify the token
-    if (token) {
-        const tokenVerify = jwt.verify(token, "Nodejs_secret_key");
-
-        if (tokenVerify) {
-            user = await User.findById(tokenVerify._id);
-        }
+    let tasks;
+    if(req?.user) {
+        tasks = await Task.find({ user: req.user._id });
     }
+    res.render('home', { user: req?.user, tasks: tasks })
 
-    res.render('home', { user ,tasks:tasks})
 }
 
 async function userSignup(req, res) {
@@ -71,7 +55,7 @@ async function userLogin(req, res) {
                 res.cookie('token', token);
 
                 // now user is loggin we redirect to home page
-                res.redirect('/task');
+                res.redirect('/');
 
             } else {
                 
@@ -86,9 +70,7 @@ async function userLogin(req, res) {
     }
 }
 
-async function userProfile(req,res){
-    res.render('profile')
-}
+
 
 async function userLogout(req,res) {
     console.log("clear")
@@ -98,4 +80,4 @@ async function userLogout(req,res) {
 
 
 
-module.exports = { home, homePage, userSignup,userLogin,userProfile,userLogout}
+module.exports = { homePage, userSignup,userLogin,userProfile,userLogout}

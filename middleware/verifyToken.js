@@ -4,21 +4,12 @@ const User = require("../models/user");
 async function verifyToken(req, res, next) {
     try {
         const token = req.cookies['token'];
-        
-        if (!token) {
-            throw "Token is missing";
-        }
-        
-        const tokenVerify = jwt.verify(token, "Nodejs_secret_key");
-        
-        if (!tokenVerify) {
-            throw "Invalid token";
-        }
 
-        req.user = await User.findById(tokenVerify._id);
-        
-        if (!req.user) {
-            throw "User not found";
+        if (token) {
+            // If token is missing, redirect to login page
+            const tokenVerify = jwt.verify(token, "Nodejs_secret_key");
+            req.user = await User.findById(tokenVerify._id);
+            // return res.redirect('/');
         }
 
         next();

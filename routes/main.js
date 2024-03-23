@@ -5,8 +5,7 @@ const taskcontroller = require("../controller/task")
 const verifyToken = require("../middleware/verifyToken");
 
 
-router.get('/',controller.home);
-
+router.route('/').get(verifyToken,controller.homePage);
 
 
 router.get('/signup',controller.userSignup);
@@ -18,16 +17,16 @@ router.post('/login',controller.userLogin);
 
 router.get('/user',controller.userProfile)
 
-router.route('/task').get(verifyToken,taskcontroller.getTask)
+
 router.route('/task').post(verifyToken,taskcontroller.newtask)
 
-router.route('/task/complete/:id').post(verifyToken,taskcontroller.completetask);
+router.route('/complete/:id').post(verifyToken,taskcontroller.completetask);
 router.route('/task/delete/:id').post(verifyToken,taskcontroller.deletetask);
 
 router.get('/logout',controller.userLogout);
 
 
-router.route('/user').get(verifyToken,controller.home);
+router.route('/user').get(verifyToken,controller.userProfile);
 
 
 module.exports = router;
